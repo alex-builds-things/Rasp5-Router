@@ -48,3 +48,54 @@ This project uses 802.1Q VLAN tagging on a trunk port. A standard ethernet cable
             - This utilizes a SSH key that is generated on your device and copied to github. 
 
             - I chose this option because it does not expire, and it required me to switch my repo remote from HTTPS to SSH using the following "git remote set-url origin git@github.com:profilename/nameofrepo.git"
+
+
+2 - Lost SSH access to Raspberry Pi after setting up GitHub Authentication:
+    - While setting up SSH authentication for GitHub, I ran the following command 
+      without specifying a filename:
+      
+        ssh-keygen -t ed25519 -C "email@example.com"
+        
+    - This overwrote the existing SSH key that was being used to connect to the 
+      Raspberry Pi, as both were saved to the same default file (id_ed25519). 
+      After this, attempting to SSH into the Pi returned the following error:
+      
+        pi@[assigned_IP_Address] Permission denied (publickey, password)
+
+    - Resolution:
+        STEP 1 - Attempted to access the Pi's SSH config directly via the SD card
+            - The SD card was removed from the Pi and inserted into a Windows machine
+            - The rootfs partition (where sshd_config lives) is Linux formatted (ext4) 
+              and could not be read natively on Windows
+            - DiskInternals Linux Reader was used to access the partition, however 
+              writing back to the partition requires the paid version
+
+        STEP 2 - Decided to reflash the SD card
+            - Raspberry Pi Imager was used to flash a fresh Raspberry Pi OS lite (64-bit) image
+            - SSH, username, and password were pre-configured inside the Imager settings 
+              before writing, removing the need for a keyboard to set up the Pi
+
+        STEP 3 - Restructured SSH keys to prevent this from happening again
+            - A dedicated key was generated for GitHub:
+                ssh-keygen -t ed25519 -C "email@example.com" -f ~/.ssh/id_ed25519_github
+                
+            - A dedicated key was generated for the Raspberry Pi:
+                ssh-keygen -t ed25519 -C "pi-access" -f ~/.ssh/id_ed25519_pi
+                
+            - An SSH config file (~/.ssh/config) was created to map each key to its 
+              respective host, ensuring the keys never conflict:
+
+                # GitHub
+                Host github.com
+                  HostName github.com
+                  User git
+                  IdentityFile ~/.ssh/id_ed25519_github
+
+                # Raspberry Pi
+                Host rasp5-router.lan
+                  HostName rasp5-router.lan
+                  User piuser
+                  IdentityFile ~/.ssh/id_ed25519_pi
+
+    - Key lesson: Always use the -f flag when generating SSH keys to specify a filename. 
+      Never run ssh-keygen without it if existing keys are present on the machine.
