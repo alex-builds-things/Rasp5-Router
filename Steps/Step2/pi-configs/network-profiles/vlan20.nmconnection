@@ -1,0 +1,23 @@
+[connection]
+id=vlan20
+uuid=[YOUR UUID HERE]
+type=vlan
+interface-name=eth1.20
+
+[ethernet]
+
+[vlan]
+flags=1
+id=20
+parent=eth1
+
+[ipv4]
+address1=192.168.20.1/24
+method=manual
+never-default=true
+
+[ipv6]
+addr-gen-mode=default
+method=disabled
+
+[proxy]

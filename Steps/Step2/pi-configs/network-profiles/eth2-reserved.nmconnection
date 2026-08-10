@@ -1,0 +1,16 @@
+[connection]
+id=eth2-reserved
+uuid=[YOUR UUID HERE]
+type=ethernet
+interface-name=eth2
+
+[ethernet]
+
+[ipv4]
+method=disabled
+
+[ipv6]
+addr-gen-mode=default
+method=disabled
+
+[proxy]
