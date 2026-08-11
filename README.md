@@ -46,12 +46,12 @@ This project uses 802.1Q VLAN tagging on a trunk port. A standard ethernet cable
 
 # Traffic Rules
 
-  From              To                Decision
-  VLAN 10           Internet          Allowed
-  VLAN 20           Internet          Allowed
-  VLAN 10           VLAN 20           Allowed
-  VLAN 20           VLAN 10           Blocked
-
+| FROM | TO | Decision |
+|----------|----------|----------|
+| VLAN 10  | Internet   | ALLOWED   |
+| VLAN 20   | Internet   | ALLOWED   |
+| VLAN 10  | VLAN 20  | ALLOWED   |
+| VLAN 20   | VLAN 10   | BLOCKED   |
 
 ## Challenges and How they were resolved
 1 - Inability to push to git rep:
