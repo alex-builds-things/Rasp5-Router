@@ -36,19 +36,13 @@ This project uses 802.1Q VLAN tagging on a trunk port. A standard ethernet cable
 
 # IP Address Plan
 
-Interface         Role              IP Address                        Devices Served
-  eth0            WAN               Obtained from ISP                 None
-  eth1            Trunk Parent      No IP - Carries tagged traffic    Parent for eth1.10 and eth1.20
-  eth1.10         VLAN10 gateway    192.168.10.1/24                   192.168.10.100-200
-  eth1.20         VLAN20 gateway    192.168.20.1/24                   192.168.20.100-200
-  eth2            Reserved          No IP configured                  Future use
-
 | Interface| Role     | IP Address|  Devices Served  |
 |----------|----------|-----------|------------|
 | eth0 | WAN  | Obtained from ISP    |  None      |
-| Cell 4   | Cell 5   | Cell 6    |  Cell      |
-| Cell 1   | Cell 2   | Cell 3    |  Cell      |
-| Cell 4   | Cell 5   | Cell 6    |  Cell      |
+| eth1 | Trunk Parent  | NO IP - Carries tagged traffic    |  Parent for eth1.10 and eth1.20   |
+| eth1.10  | VLAN 10 gateway  | 192.168.10.1/24    |  192.168.10.100-200     |
+| eth1.20   | VLAN 20 gateway  | 192.168.20.1/24  |  192.168.20.100-200   |
+
 
 # Traffic Rules
 
