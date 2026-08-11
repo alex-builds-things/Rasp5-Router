@@ -64,3 +64,32 @@ Never skip this critical step on a fresh install. An outdated system has known v
 
     3. Reboot the Pi:
         sudo reboot
+
+
+## Part C - Securing SSH Access
+
+## 3.1 Verify SSH Configuration
+1. Check if SSH is active:
+    sudo systemctl status ssh
+    - Must show: Active
+   
+2. Check critical SSH settings:
+   sudo grep -E "PasswordAuthentication|PermitRootLogin" /etc/ssh/sshd_config
+    - You should see:
+       PasswordAuthentication yes
+       PermitRootLogin no
+
+3. If PermitRootLogin shows yes, fix it:
+   1. sudo nano /etc/ssh/sshd_config
+
+   2. Find "PermitRootLogin" and change it to:
+      1. PermitRootLogin no
+   
+   3. Save: Ctrl+X, Press Y, Press Enter
+   
+   4. Restart SSH:
+      sudo systemctl restart ssh
+
+
+## 3.2 SSH Key Authentication
+   
