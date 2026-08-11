@@ -25,14 +25,31 @@ PI OS Bookwork uses nftables as its firewall backend. iptables commands from the
 
 
 ## Steps to be completed:
-- Flash Raspberry Pi OS to SD card
-- Configure network interfaces
-- Set up firewall rules
-- Test routing and internet access
+- Step 1 - Flash Raspberry Pi OS to SD card
+- Step 2 - Configure network interfaces and IP Forwarding
+- Step 3 -  Install and configure dnsmasq and Set up firewall rules
+- Step 4 -  Test routing and internet access
 
 
 ## Understanding the Network's Design
 This project uses 802.1Q VLAN tagging on a trunk port. A standard ethernet cables carries one network, while a trunk port carries multiple networks simultaneously by tagging each packet with a VLAN ID number. The AP (EAO670) receives packets from clients on each VLAN that was created, stamps each with their respective vlan id, and sends all traffic up a single ethernet cable to the Pi. The Pi reads the VLAN tag and routes each packet to the correct virtual interface.
+
+# IP Address Plan
+  # Interface     Role              IP Address                        Devices Served
+  eth0            WAN               Obtained from ISP                 None
+  eth1            Trunk Parent      No IP - Carries tagged traffic    Parent for eth1.10 and eth1.20
+  eth1.10         VLAN10 gateway    192.168.10.1/24                   192.168.10.100-200
+  eth1.20         VLAN20 gateway    192.168.20.1/24                   192.168.20.100-200
+  eth2            Reserved          No IP configured                  Future use
+
+
+
+# Traffic Rules
+  # From            To                Decision
+  VLAN 10           Internet          Allowed
+  VLAN 20           Internet          Allowed
+  VLAN 10           VLAN 20           Allowed
+  VLAN 20           VLAN 10           Blocked
 
 
 ## Challenges and How they were resolved
