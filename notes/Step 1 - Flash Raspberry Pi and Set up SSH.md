@@ -92,4 +92,44 @@ Never skip this critical step on a fresh install. An outdated system has known v
 
 
 ## 3.2 SSH Key Authentication
+Using SSH keys removes the need to enter a password every time and is more secure than password authentication.
+
+1. Check for existing SSH keys:
+   ls -la ~/.ssh
+   - If you see files named id_ed25519 and id_ed25519.pub already, you may have an existing key. Proceed carefully to avoid overwriting it.
+
+2. Generate a dedicated SSH key for the Pi:
+Always use the -f flag to specify a filename. This prevents overwriting any existing keys:
+    ssh-keygen -t ed25519 -C "pi-access" -f ~/.ssh/id_ed25519_pi
+
+    - Press Enter twice to skip the passphrase, or add one for extra security
+    - This creates two files:
+      ~/.ssh/id_ed25519_pi (Private key)
+      ~/.ssh/id_ed25519_pi.pub (Public key)
+
+3. Copy the public key to the Pi
+   ssh-copy-id -i ~/.ssh/id_ed25519_pi.pub   pi_username@pi_IP_Address
+   Enter your Pi password when prompted. This adds the public key to the Pi's authorized_keys file.
+
+4. Create an SSH config file
+The config file tells your machine which key to use when connecting to the Pi.
+    nano ~/.ssh/config
+
+Add the following:
+    Host (user can assign any name)
+        HostName (Pi ip address)
+        User    (pi_username)
+        IdentifyFile ~/.ssh/id_ed25519_pi
+
+5. Test the connection
+    ssh (name assigned in #4 directly above)
+
+## 3.3 Disable password login
+   1. Open SSH config:
+       sudo nano /etc/ssh/sshd_config
+       
+   2. Change PasswordAuthentication to:
+       PasswordAuthentication no
    
+   3. Save and restart SSH:
+       sudo systemctl restart ssh  
