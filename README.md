@@ -43,6 +43,12 @@ Interface         Role              IP Address                        Devices Se
   eth1.20         VLAN20 gateway    192.168.20.1/24                   192.168.20.100-200
   eth2            Reserved          No IP configured                  Future use
 
+| Interface| Role     | IP Address|  Devices Served  |
+|----------|----------|-----------|------------|
+| eth0 | WAN  | Obtained from ISP    |  None      |
+| Cell 4   | Cell 5   | Cell 6    |  Cell      |
+| Cell 1   | Cell 2   | Cell 3    |  Cell      |
+| Cell 4   | Cell 5   | Cell 6    |  Cell      |
 
 # Traffic Rules
 
