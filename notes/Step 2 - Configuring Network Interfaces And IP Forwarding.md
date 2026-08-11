@@ -22,7 +22,7 @@ The Pi sends and receives tagged traffic on eth1, reads the VLAN ID, and routes 
 # 2. Configure eth1 - Trunk Parent Interface
 Eth1 carries tagged traffic for both VLANs.
 
-2.1 Create trunk parent profile with no IP
+# 2.1 Create trunk parent profile with no IP
     $ sudo nmcli connection add\
         type ethernet \
         ifname eth1 \
@@ -35,7 +35,7 @@ Eth1 carries tagged traffic for both VLANs.
 
 
 # 3. Configure eth1.10 - VLAN 10 subinterface, 192.168.10.1
-3.1 Create vlan 10 interface
+# 3.1 Create vlan 10 interface
     $ sudo nmcli connection add\
         type vlan \
         con-name vlan10 \
@@ -53,7 +53,7 @@ Eth1 carries tagged traffic for both VLANs.
 
 
 # 4. Configure eth1.20 - VLAN 20 subinterface, 192.168.20.1
-4.1 Create vlan 20 interface
+# 4.1 Create vlan 20 interface
     $ sudo nmcli connection add\
         type vlan \
         con-name vlan20 \
@@ -72,7 +72,7 @@ Eth1 carries tagged traffic for both VLANs.
 # 5. Reserve eth2 interface
 eth2 is physically connected but intentionally unconfigured. Creating a disabled profile documents its reserved status and prevents NetworkManager from trying to auto-configure it.
 
-5.1 Create a disabled profile for eth2
+# 5.1 Create a disabled profile for eth2
     $ sudo nmcli connection add\
         type ethernet \
         ifname eth2 \
@@ -82,19 +82,19 @@ eth2 is physically connected but intentionally unconfigured. Creating a disabled
 
 
 # 6. Verify configurations and default route
-$ ip addr show
+    $ ip addr show
 
-You must see:
-    eth0:       inet [Temporary IP from ISP during configuration]
-    eth1:       no inet line [Trunk parent has no IP]
-    eth1.10:    inet 192.168.10.1/24
-    eth1.20:    inet 192.168.20.1/24
-    eth2:       no inet line [Reserved]
+    You must see:
+        eth0:       inet [Temporary IP from ISP during configuration]
+        eth1:       no inet line [Trunk parent has no IP]
+        eth1.10:    inet 192.168.10.1/24
+        eth1.20:    inet 192.168.20.1/24
+        th2:       no inet line [Reserved]
 
-Verify default route
-    $ ip route show
+    Verify default route
+        $ ip route show
 
-the 'default via' line must reference eth0. If 1.10 or 1.20 appears as default routes, the ipv4.never-default flag was not applied. Re-run Steps 2 - 4, paying keen attention to the never-default flag.
+    The 'default via' line must reference eth0. If 1.10 or 1.20 appears as default routes, the ipv4.never-default flag was not applied. Re-run Steps 2 - 4, paying keen attention to the never-default flag.
 
 
 
