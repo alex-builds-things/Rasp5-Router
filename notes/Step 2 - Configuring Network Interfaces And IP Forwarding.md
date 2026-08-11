@@ -7,7 +7,7 @@ The Pi sends and receives tagged traffic on eth1, reads the VLAN ID, and routes 
 
 
 # 1. Configure eth0 - WAN interface
-1.1 Create a NetworkManager profile for the WAN port:
+# 1.1 Create a NetworkManager profile for the WAN port:
     $ sudo nmcli connection add\
         type ethernet \
         ifname eth0 \
