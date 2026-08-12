@@ -5,9 +5,11 @@ dnsmasq handles two jobs simultaneously: DHCP and DNS. One dnsmasq instance serv
 
 # 1. Install dnsmasq
 1.1 Install dnsmasq
-    sudo apt install dnsmasq -y
+    
+        sudo apt install dnsmasq -y
 
 1.2 Stop dnsmasq and configure it:
-    sudo systemctl stop dnsmasq
+    
+        sudo systemctl stop dnsmasq
 
 # 2. Resolve Port 53 Conflicts
