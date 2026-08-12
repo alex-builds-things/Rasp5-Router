@@ -42,7 +42,8 @@ Back up and replace the default dnsmasq configuration:
 
 # 4. Write the dnsmasq Configuration
 1. Create a clean configuration file:
-        sudo nano /etc/dnsmasq.conf
+        
+            sudo nano /etc/dnsmasq.conf
 
 2. Paste the following: It excludes steps taken to resolve Challendge #3 - Unable to copy configuration files from Pi to Local System (found in readme file):
    
@@ -90,11 +91,11 @@ Back up and replace the default dnsmasq configuration:
 3. Save: Ctrl + X, press Y, press enter
    
 4. Start and enable dnsmasq
-        sudo systemctl start dnsmasq
-        sudo systemctl enable dnsmasq
+            sudo systemctl start dnsmasq
+            sudo systemctl enable dnsmasq
 
 5. Verify dnsmasq is running:
-        sudo systemctl status dnsmasq
+            sudo systemctl status dnsmasq
 
 6. Must show: Active:active (running). If it shows failed:
-        sudo journalctl -u dnsmasq 
+            sudo journalctl -u dnsmasq 
