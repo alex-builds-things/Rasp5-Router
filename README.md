@@ -128,4 +128,4 @@ This project uses 802.1Q VLAN tagging on a trunk port. A standard ethernet cable
         # iif "eth0" ip saddr 192.168.100.0/24 tcp dport 22 accept
       - The ruleset was then reloaded with *sudo nft -f /etc/nftables.conf* . The scp command was then executed successfully from the Mac.
   
-    - Note: This rule is temporary for the configuration phase. It must be removed from /etc/nftables.conf before the Pi receives a public IP address from the ISP. At which point SSH access will be handled exclusively through eth1.10 on VLAN 10. 
+    
