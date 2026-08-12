@@ -91,11 +91,14 @@ Back up and replace the default dnsmasq configuration:
 3. Save: Ctrl + X, press Y, press enter
    
 4. Start and enable dnsmasq
+            
             sudo systemctl start dnsmasq
             sudo systemctl enable dnsmasq
 
 5. Verify dnsmasq is running:
+            
             sudo systemctl status dnsmasq
 
 6. Must show: Active:active (running). If it shows failed:
+            
             sudo journalctl -u dnsmasq 
