@@ -119,7 +119,7 @@ This project uses 802.1Q VLAN tagging on a trunk port. A standard ethernet cable
       Never run ssh-keygen without it if existing keys are present on the machine.
 
 3 - Unable to copy configuration files from Pi to Local System:
-    - During the configuration phase, i attempted to copy the dnsmasq.conf and nftables.conf files from the Pi to a Desktop folder using *scp*, which resulted in an *Operation timed out* error and a closed connection.
+  During the configuration phase, i attempted to copy the dnsmasq.conf and nftables.conf files from the Pi to a Desktop folder using *scp*, which resulted in an *Operation timed out* error and a closed connection.
     - A connectivity test confirmed that the Mac could not reach the Pi, but the Pi could ping the Mac.
     - The root cause was the nftables firewall configured as part of the router setup. The firewall's input chain was correctly configured to only allow SSH traffic on eth1.10 (VLAN 10). Any SSH connection attempt arriving on eth0 (the Home network interface), was silently dropped by the default policy, regardless of which device was attempting to connect.
   
@@ -128,4 +128,4 @@ This project uses 802.1Q VLAN tagging on a trunk port. A standard ethernet cable
         # iif "eth0" ip saddr 192.168.100.0/24 tcp dport 22 accept
       - The ruleset was then reloaded with *sudo nft -f /etc/nftables.conf* . The scp command was then executed successfully from the Mac.
   
-    
+    - Note: This rule is temporary for the configuration phase. It must be removed from /etc/nftables.conf before the Pi receives a public IP address from the ISP. At which point SSH access will be handled exclusively through eth1.10 on VLAN 10. 
