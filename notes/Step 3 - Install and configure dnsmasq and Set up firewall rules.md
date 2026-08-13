@@ -255,6 +255,6 @@ No output means the rules loaded successfully. An error message will name the ex
 | iif  "eth1.10" tcp dport 22 accept     | VLAN 10 devices can SSH into Pi. VLAN 20 devices cannot.  |
 | iif "eth1.10" oif "eth0" accept  | VLAN 10 devices can browse the internet  |
 | iif "eth1.20" oif "eth0" accept  | VLAN 20 devices can access the internet  |
-| iif "eth1.10" oif "eth1.20" accept  | VLAn 10 devices can reach and control VLAN 20 devices |
+| iif "eth1.10" oif "eth1.20" accept  | VLAN 10 devices can reach and control VLAN 20 devices |
 | iif "eth1.20" oif "eth1.10" drop  | VLAN 20 devices are blocked from reaching VLAN 10 devices|
 | oif "eth0" masquerade  | NAT: all outbound internet traffic appears to come from the Pi's public IP |
