@@ -28,7 +28,8 @@ PI OS Bookwork uses nftables as its firewall backend. iptables commands from the
 - Step 1 - Flash Raspberry Pi and Set up SSH 
 - Step 2 - Configure network interfaces and IP Forwarding
 - Step 3 -  Install and configure dnsmasq and Set up firewall rules
-- Step 4 -  Test routing and internet access
+- Step 4 - Configuring wireless access point (AP)
+- Step 5 -  Test routing and internet access
 
 
 ## Understanding the Network's Design
