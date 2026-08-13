@@ -51,6 +51,7 @@ Create the first wireless network that VLAN 10 devices will connect to. Look for
 Create a new wireless network with the following settings/information:
 
 | Setting   | Value to configure    |
+|----------|-------|
 | SSID / Network Name   |   Any name you prefer for VLAN 10 devices |
 | VLAN ID   |   10  (This is critical to ensure that all traffic from this SSID is tagged correctly)    |
 |   Security    |   WPA2-Personal or WPA3-Personal  |
@@ -66,7 +67,7 @@ Create the first wireless network that VLAN 20 devices will connect to. Look for
 Create a new wireless network with the following settings/information:
 
 | Setting   | Value to configure    |
-|-----------------------------------|
+|----------------|-------------------|
 | SSID / Network Name   |   Any name you prefer for VLAN 20 devices |
 | VLAN ID   |   20  (This is critical to ensure that all traffic from this SSID is tagged correctly)    |
 |   Security    |   WPA2-Personal or WPA3-Personal  |
@@ -98,7 +99,7 @@ Some APs require the uplink ethernet port to be explicitly configured as a trunk
 If uplink or VLAN configuration section is present, configure it as follows:
 
 |   Settings    |   Value to Configure  |
-|---------------------------------------|
+|-----------------|----------------------|
 | Port Mode |   Trunk   |
 | Tagged VLANs  |   VLAN 10 and VLAN 20 (both must be added as tagged)  |
 | Untagged/Native VLAN  |   Remove or leave unset   |
