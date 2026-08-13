@@ -5,7 +5,7 @@ These instructions will be written generically, the specific menu labels and nav
 The AP takes wi-fi traffic from two separate wireless networks, tags each packet with the correct VLAN ID, and sends all of it upstream tot he Pi over a single ethernet cable. The Pi handles all routing, NAT, DHCP, and firewall decision. The AP does not route, NAT, or assign IP addresses, it is a wireless broadcaster only.
 
 |   What AP handles |   What the Pi Handles |
-|------------------------------------------|
+|--------------------|----------------------|
 | Wireless client connections | Routing between VLANs and internet  |
 | VLAN tagging per SSID | NAT masquerade to ISP |
 | 802.1Q trunk on uplink port   | DHCP address assignment   |
@@ -59,7 +59,7 @@ Create a new wireless network with the following settings/information:
 |Frequency Band |   2.4 GHz and 5 GHz for VLAN 10 devices   |
 | DHCP  |   Disable it  |
 
-Save the seetings and confirm that the dashboard is still accessible.
+Save the settings and confirm that the dashboard is still accessible.
 
 # 1.6 Create SSID for VLAN 20 Devices
 Create the first wireless network that VLAN 20 devices will connect to. Look for Wireless, Wireless Networks, SSIDs, or Wi-Fi networks in the menu.
@@ -75,7 +75,7 @@ Create a new wireless network with the following settings/information:
 |Frequency Band |   2.4 GHz for VLAN 20 devices   |
 | DHCP  |   Disable it  |
 
-Save the seetings and confirm that the dashboard is still accessible.
+Save the settings and confirm that the dashboard is still accessible.
 
 
 # 1.7 Client Isolation on VLAN 20 (If available)
