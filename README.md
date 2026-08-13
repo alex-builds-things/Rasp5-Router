@@ -132,3 +132,9 @@ This project uses 802.1Q VLAN tagging on a trunk port. A standard ethernet cable
       - The ruleset was then reloaded with *sudo nft -f /etc/nftables.conf* . The scp command was then executed successfully from the Mac.
   
     - Note: This rule is temporary for the configuration phase. It must be removed from /etc/nftables.conf before the Pi receives a public IP address from the ISP. At which point SSH access will be handled exclusively through eth1.10 on VLAN 10. 
+
+4 - Unable to configure client isolation
+
+    Client isolation (AP isolation or wireless isolation) was not availabe in the version of firmware running on the wireless AP used in this project. When enabled on the SSID used for VLAN 20, client isolation would have prevented VLAN 20 devices from communicating directly with each other over wifi, restricting them to gateway-only communication.
+
+    This was a secondary security hardening measure, but its absence does not compromise the primary security objective of this project. The nftables firewall rules configured on the Pi enforce VLAN-level isolation at the network layer.
