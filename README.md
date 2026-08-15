@@ -145,4 +145,7 @@ This project uses 802.1Q VLAN tagging on a trunk port. A standard ethernet cable
 
     After configuring the wireless AP and going live, the AP web interface will become inaccessible, as that traffic will be untagged (not on VLAn 10 or VLAN 20). Therefore the Pi's firewall and nftables rules will silently drop this traffic.
 
-    To access the AP's web interface, disconnect it from the Pi eth1 and connect directly to a computer via ethernet. Set the computer's ethernet IP manually to be on the same subnet as the AP's management interface. Open a browser, and navigate to the AP's web interface.
+    To access the AP's web interface:
+      1. Disconnect it from the Pi eth1 and connect directly to a computer via ethernet. 
+      2. Set the computer's ethernet IP manually to be on the same subnet as the AP's management interface. 
+      3. Open a browser, and navigate to the AP's web interface.
