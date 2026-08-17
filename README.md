@@ -140,6 +140,186 @@ This project uses 802.1Q VLAN tagging on a trunk port. A standard ethernet cable
 
     This was a secondary security hardening measure, but its absence does not compromise the primary security objective of this project. The nftables firewall rules configured on the Pi enforce VLAN-level isolation at the network layer.
 
+    # This might be an issue with TP-Link/Omada managed APs.
+
+    The TP-Link EAP670 AP used in this project did not tag uplink traffic with VLAN IDs when operating in standalone mode. This is a firmware/software limitation, not a misconfiguration.
+
+    The Pi is configured with two VLAN interfaces (VLAN 10 and VLAN 20), each with its own DHCP pool and firewall rules. The AP has two SSIDs configured with the corresponding VLAN IDs, but all traffic sent from the AP to the Pi arrives untagged on the physical interface (eth1). As a result, the Pi cannot associate traffic with the correct VLAN, and wireless clients receive no DHCP address and have no internet access.
+
+    TP-Link's standalone web interface does not expose uplink trunk port configuration. Enabling VLAN tagging on the uplink requires the Omada Software Controller, which must adopt the AP before trunk port settings become available.
+
+    Workarounds that were evaluated:
+      - Omada Software Controller - adopt the AP to unlock trunk port VLAN configuration.
+      - Utilize a different AP
+      - Flash OpenWrt to AP. However, there is no official or stable OpenWrt firmware support for the model AP used in this project.
+      - Single SSID/ No VLANs - simplify the network to a single flat subnet, the trading device isolation for immediate functionality.
+  
+    I opted to keep one SSID, and enable the Pi to receive untagged traffic directly. Therefore, there are no VLAN interfaces, no need for Omada controller, and no tagging.
+
+    Step by Step Resolution:
+    1. Remove VLAN Interfaces
+          sudo ip link set eth1.10 down
+          sudo ip link set eth1.20 down
+          sudo ip link delete eth1.10
+          sudo ip link delete eth1.20
+
+        Confirm they have been removed:
+          ip link show | grep eth1
+
+    2. Assign IP directly to eth1
+          sudo ip addr flush dev eth1
+          sudo ip addr add 192.168.10.1/24 dev eth1
+          sudo ip link set eth1 up
+
+        Confirm interface is up
+          ip addr show eth1
+
+    3. Persist eth1 IP via NetworkManager
+      Remove any exisiting VLAN connection profiles and create a clean one for eth1.
+          #List exisiting connections
+            nmcli con show
+
+          # Delete old VLAN profiles 
+            sudo nmcli con delete "eth1.10"
+            sudo nmcli con delete "eth1.20"
+
+          # Create new flat LAN connection
+            sudo nmcli con add type ethernet ifname w=eth1 con-name lan\
+            ipv4.method manual \
+            ipv4.addresses 192.168.10.1/24 \
+            ipv4.never-default yes \
+            connection.autoconnect yes
+
+            sudo nmcli co up lan
+
+    4. Update Dnsmasq
+      Edit /etc/dnsmasq.conf
+            sudo nano /etc/dnsmasq.conf
+      
+      Replace with:
+            # Bind to LAN interface only
+
+            interface=eth1
+
+            bind-interfaces
+
+            #DHCP Pool
+
+            dhcp-range=192.168.10.100, 192.168.10.150,24h
+
+            # Upstream DNS
+            server=1.1.1.1
+            server=8.8.8.8
+
+            # Local domain
+            domain=home.local
+            local=/home.local/
+        
+          sudo systemctl restart dnsmasq
+
+          sudo systemctl status dnsmasq
+
+    5. Update nftables
+    The new ruleset removes all VLAN-specific rules
+          sudo nano /etc/nftables.conf
+
+    Replace entire file with:
+
+          table inet filter {
+            chain input {
+              type filter hook input priority filter; policy drop;
+              iif "lo" accept
+              ct state established,related accept
+              ct state invalid drop
+
+              # SSH 
+              iif "eth1" tcp dport 22 accept
+              iif "eth2" tcp dport 22 accept
+              iif "eth0" ip saddr (Home IP address Ex: 192.168.100.0/24) tcp dport accept
+              # Replace Home IP Address with your local home network IP address. Use this to ensure SSH access from home network. Can be seen a security issue.
+
+              # DHCP - LAN
+              iif "eth1" udp dport 67 accept
+
+              # DNS - LAN
+              iif "eth1" udp dport 53 accept
+              iif "eth1" tcp dport 53 accept
+
+              # Ping - LAN
+              iif "eth1" icmp type echo-request accept
+              iif "eth2" icmp type echo-request accept
+
+            }
+
+            Chain forward {
+              type filter hook forward priority filter; policy drop;
+              ct state established,related accept
+              ct state invalid drop
+
+              # LAN to internet
+              iif "eth1" oif "eth0" accept
+
+            }
+
+            chain output {
+              type filter hook output priority filter; policy accept;
+              
+            }
+          }
+
+          table inet nat {
+            chain postrouting {
+              type nat hook postrouting priority srcnat; policy accept;
+              oif "eth0" masquerade
+            
+            }
+          }
+
+
+      Ctrl + X, Press Y, Press Enter
+
+          sudo nft -f /etc/nftables.conf
+          sudo nft list ruleset
+          sudo systemctl restart nftables
+
+    6. Verify IP Forwarding is enabled
+    Check current state
+          cat /proc/sys/net/ipv4/ip_forward
+
+          # must return 1. If it returns 0, internet will not work for any client.
+
+    If it returns 0, enable it:
+          sudo sysctl -w net.ipv4.ip_forward=1
+
+    Make it permanent across reboots:
+          sudo nano /etc/sysct.conf
+
+          # add or uncomment 
+          net.ipv4.ip_forward=1
+
+          # Apply 
+          sudo sysctl -p
+
+          # Confirm
+
+          cat /proc/sys/net/ipv4/ip_forward
+          # Must return 1
+
+    7. Configure TP link AP for single SSID
+    Log into TP link web interface and disable second SSID.
+
+          # Connect device directly to AP via ethernet
+
+          # Set device IP to be on the same network as AP
+          # Open browser and navigate to web interface
+          # Log in with admin credentials
+
+          # Wireless Settings:
+          # - Keep VLAN 10 SSID but remove any VLAN ID
+          # - Disble or delete VLAN 20 SSID
+          # - Save and reboot AP
+   
+
 
 5 - Inability to access AP Web Interface
 
